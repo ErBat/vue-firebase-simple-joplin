@@ -35,6 +35,15 @@ async function updateNote(){
   });
 }
 
+async function changeNotebookName(){
+  const notebookId = clientStore.currentNotebook.id
+  const docRef = doc(collection(db, "notebooks"), notebookId)
+  const name = clientStore.currentNotebook.name
+  await updateDoc(docRef, {
+      name: name
+  });
+}
+
 function selectNote(note){
   clientStore.setCurrentNote(note)
 }
@@ -44,6 +53,7 @@ function selectNote(note){
   <div class="flex-column list" v-if="clientStore.currentNotebook">
     <div class="menu">
       <button class="addNote" @click="addNote()">+</button>
+      <input class="titleInput" @input="changeNotebookName()" v-model="clientStore.currentNotebook.name"/>
     </div>
     <div class="note" v-for="note in clientStore.currentNotebook?.notes">
       <button class="selectButton" @click="selectNote(note)">{{ note.title }}</button>
@@ -54,6 +64,17 @@ function selectNote(note){
 </template>
 
 <style scoped>
+.titleInput{
+  font-weight: bold;
+  font-size: 17px;
+}
+
+input{
+  border: 1px solid #E1E1E1;
+  background: #fff;
+  color: #333;
+  margin-bottom: 0;
+}
 .selectButton{
   width: 80%;
   height: 100%;
