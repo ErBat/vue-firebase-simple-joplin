@@ -10,6 +10,7 @@ const user = useCurrentUser();
 const clientStore = useClientStore()
 
 const curHeight = ref("auto")
+const mouseOver = ref(false)
 const props = defineProps({
   node: Object,
   spacing: {
@@ -66,10 +67,19 @@ const toggle = () => {
 function selectNotebook(notebook){
   clientStore.setCurrentNotebook(notebook)
 }
+
+const onHoverHandler = (e) =>{
+  e.stopPropagation()
+  mouseOver.value = true;
+}
+const onLeaveHandler = (e) =>{
+  e.stopPropagation()
+  mouseOver.value = false;
+}
 </script>
 
 <template>
-  <div class="wrapper" :style="nodeMargin" v-if="props.visible"> 
+  <div @mouseover="onHoverHandler($event)" @mouseleave="onLeaveHandler($event)" class="wrapper" :style="nodeMargin" v-if="props.visible"> 
     <button class="fixed-wrapper" v-if="hasChildren" @click="toggle()">
       <span class="icon" v-if="curHeight">&#9662;</span>
       <span class="icon" v-else>&#9656;</span>
@@ -77,8 +87,10 @@ function selectNotebook(notebook){
     <button @click="selectNotebook(node)">
       {{ node.name ? node.name : "Unnamed notebook" }}
     </button>
-    <button class="addIcon" @click="createChildNotebook(node.id)">+</button>
-    <button class="removeIcon" @click="deleteNotebook(node.id)">🗑</button>
+    <div class="buttons">
+      <button :class="{visibleOnHover: mouseOver, addIcon: true}" @click="createChildNotebook(node.id)">+</button>
+      <button :class="{visibleOnHover: mouseOver, removeIcon: true}" @click="deleteNotebook(node.id)">🗑</button>
+    </div>
     <template v-if="hasChildren">
       <MultiLevelAccordeon
         v-for="child in node.children"
@@ -93,6 +105,17 @@ function selectNotebook(notebook){
 </template>
 
 <style scoped>
+.addIcon, .removeIcon{
+  opacity: 0;
+  transition: opacity 300ms;
+}
+.visibleOnHover{
+  opacity: 1;
+}
+
+.buttons{
+  display: inline-block;
+}
 .fixed-wrapper{
   position: relative;
   display: block;
