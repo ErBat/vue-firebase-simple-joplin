@@ -30,7 +30,8 @@ const menu = computed(() => {
 function logOut(){
   signOut(auth).then(() => {
     // Sign-out successful.
-    router.push('/login')
+    //router.push('/login')
+    router.go('/login')
   }).catch((error) => {
     // An error happened.
   }); 
