@@ -16,6 +16,7 @@ async function addNote(){
   await updateDoc(docRef, {
       notes: notes
   });
+  clientStore.updateStore()
 }
 
 function deleteNote(note){
@@ -33,6 +34,7 @@ async function updateNote(){
   await updateDoc(docRef, {
       notes: notes
   });
+  clientStore.updateStore()
 }
 
 async function changeNotebookName(){
