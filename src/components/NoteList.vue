@@ -12,7 +12,7 @@ async function addNote(){
   const notebookId = notebook.id
   const docRef = doc(collection(db, "notebooks"), notebookId)
   const notes = notebook.notes
-  notes.push({title: name, content: ""})
+  notes.push({title: name, content: "", id: new Date().valueOf()})
   await updateDoc(docRef, {
       notes: notes
   });
@@ -42,6 +42,7 @@ async function changeNotebookName(){
   await updateDoc(docRef, {
       name: name
   });
+  clientStore.updateStore()
 }
 
 function selectNote(note){

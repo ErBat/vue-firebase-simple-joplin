@@ -13,10 +13,8 @@ async function updateNote(){
   await updateDoc(docRef, {
       notes: notes
   });
+  clientStore.updateStore()
 }
-/*
-
-*/
 
 </script>
 

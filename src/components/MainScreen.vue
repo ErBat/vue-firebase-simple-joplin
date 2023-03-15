@@ -4,6 +4,7 @@ import { useFirestore, useFirebaseAuth, useCurrentUser, useCollection } from 'vu
 import { useRouter } from 'vue-router'
 import { collection, addDoc, query, where,  } from "firebase/firestore"; 
 import { signOut } from "firebase/auth";
+import { useClientStore } from '../stores/client'
 import NotebookList from './NotebookList.vue';
 import NoteList from './NoteList.vue';
 import NoteEditor from './NoteEditor.vue';
@@ -12,6 +13,7 @@ const router = useRouter();
 
 const auth = useFirebaseAuth();
 const user = useCurrentUser();
+const clientStore = useClientStore()
 
 const db = useFirestore()
 
@@ -30,8 +32,8 @@ const menu = computed(() => {
 function logOut(){
   signOut(auth).then(() => {
     // Sign-out successful.
-    //router.push('/login')
-    router.go('/login')
+    clientStore.$reset()
+    router.push('/login')
   }).catch((error) => {
     // An error happened.
   }); 
